@@ -10,7 +10,11 @@ for /f "delims=" %%i in ('git describe --tags --always --dirty 2^>nul') do set Z
 
 rem Compilation flags
 set CFLAGS=-std=gnu11 -Wall -Wextra -Wshadow -Wformat=2 -Wmissing-prototypes ^
- -Wstrict-prototypes -Wnull-dereference -Wundef -Wduplicated-cond -Wlogical-op -g ^
+ -Wstrict-prototypes -Wnull-dereference -Wundef -Wfloat-equal ^
+ -Wmissing-field-initializers -Wsign-compare -Wtype-limits -Wuninitialized ^
+ -Wdouble-promotion -Wtautological-compare -Wshift-negative-value ^
+ -Wdangling-else -Wreturn-local-addr ^
+ -Wduplicated-cond -Wlogical-op -g ^
  -I./src -I./src/ast -I./src/parser -I./src/codegen -I./plugins -I./src/zen ^
  -I./src/utils -I./src/lexer -I./src/analysis -I./src/lsp -I./src/diagnostics ^
  -I./std/third-party/tre/include

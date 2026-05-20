@@ -42,7 +42,7 @@ void codegen_node_single(ParserContext *ctx, ASTNode *node)
         [NODE_COMPTIME] = handle_node_comptime,
     };
 
-    if (node->type >= 0 && node->type < 256 && handlers[node->type])
+    if (node->type < 256 && handlers[node->type])
     {
         handlers[node->type](ctx, node);
         return;

@@ -110,7 +110,7 @@ static int get_type_width(Type *t)
         [TYPE_U64] = 64,      [TYPE_USIZE] = 64,      [TYPE_ISIZE] = 64,       [TYPE_C_LONG] = 64,
         [TYPE_C_ULONG] = 64,  [TYPE_C_LONGLONG] = 64, [TYPE_C_ULONGLONG] = 64, [TYPE_F32] = 32,
         [TYPE_F64] = 64};
-    if (res->kind >= 0 && res->kind < (int)(sizeof(widths) / sizeof(widths[0])))
+    if (res->kind < (int)(sizeof(widths) / sizeof(widths[0])))
     {
         return widths[res->kind];
     }

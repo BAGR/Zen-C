@@ -32,12 +32,9 @@ else
     TCC_EXTRA =
 endif
 # Base flags shared by all compilers
-CFLAGS = -std=gnu11 -g -Wall -Wextra -Wshadow -Wformat=2 -Wmissing-prototypes -Wstrict-prototypes -Wnull-dereference -Wundef -Wfloat-equal $(DEPFLAGS) $(TCC_EXTRA) $(if $(filter 1,$(WERROR)),-Werror,) -I./src -I./src/ast -I./src/parser -I./src/codegen -I./plugins -I./src/zen -I./src/utils -I./src/lexer -I./src/analysis -I./src/lsp -I./src/diagnostics -I./std/third-party/tre/include $(DEFINES)
+CFLAGS = -std=gnu11 -g -Wall -Wextra -Wshadow -Wformat=2 -Wmissing-prototypes -Wstrict-prototypes -Wnull-dereference -Wundef -Wfloat-equal -Wmissing-field-initializers -Wsign-compare -Wtype-limits -Wuninitialized -Wdouble-promotion -Wtautological-compare -Wshift-negative-value -Wdangling-else -Wreturn-local-addr $(DEPFLAGS) $(TCC_EXTRA) $(if $(filter 1,$(WERROR)),-Werror,) -I./src -I./src/ast -I./src/parser -I./src/codegen -I./plugins -I./src/zen -I./src/utils -I./src/lexer -I./src/analysis -I./src/lsp -I./src/diagnostics -I./std/third-party/tre/include $(DEFINES)
 
-# Suppress WERROR for vendored code warnings (TRE, cJSON) that we can't fix
-ifneq ($(filter 1,$(WERROR)),)
-CFLAGS += -Wno-error=undef -Wno-error=float-equal
-endif
+
 
 # GCC-specific warnings
 ifneq ($(findstring clang,$(CC)),clang)

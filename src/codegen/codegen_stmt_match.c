@@ -191,7 +191,7 @@ bool is_int_type(TypeKind k)
         [TYPE_C_ULONG] = true, [TYPE_C_LONGLONG] = true, [TYPE_C_ULONGLONG] = true,
         [TYPE_C_SHORT] = true, [TYPE_C_USHORT] = true,   [TYPE_C_CHAR] = true,
         [TYPE_C_UCHAR] = true, [TYPE_BITINT] = true,     [TYPE_UBITINT] = true};
-    if (k >= 0 && k < (int)(sizeof(is_int) / sizeof(is_int[0])))
+    if (k < (int)(sizeof(is_int) / sizeof(is_int[0])))
     {
         return is_int[k];
     }

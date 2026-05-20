@@ -8,9 +8,6 @@
 
 #include <config.h>
 
-#ifndef TRE_USE_ALLOCA
-#define TRE_USE_ALLOCA 0
-#endif
 #ifdef TRE_USE_ALLOCA
 /* AIX requires this to be the first thing in the file.	 */
 #ifndef __GNUC__
@@ -307,7 +304,7 @@ static int tre_match_approx(const tre_tnfa_t *tnfa, const void *string, ssize_t 
 
     if (tnfa->num_tags > 0 && match->nmatch > 0)
     {
-#if TRE_USE_ALLOCA
+#if defined(TRE_USE_ALLOCA) && TRE_USE_ALLOCA
         tags = (decltype(tags))alloca(sizeof(*tags) * tnfa->num_tags);
 #else  /* !TRE_USE_ALLOCA */
         tags = (decltype(tags))xmalloc(sizeof(*tags) * tnfa->num_tags);

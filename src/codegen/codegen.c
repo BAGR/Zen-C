@@ -61,7 +61,7 @@ void codegen_expression(ParserContext *ctx, ASTNode *node)
         [NODE_AWAIT] = handle_await,
     };
 
-    if (node->type >= 0 && node->type < 256 && handlers[node->type])
+    if (node->type < 256 && handlers[node->type])
     {
         handlers[node->type](ctx, node);
         RECURSION_EXIT(ctx);

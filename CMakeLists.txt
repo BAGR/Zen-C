@@ -34,7 +34,7 @@ add_compile_definitions(
 )
 # --- Compiler flags (set per compiler) ---
 set(ZC_COMPILE_FLAGS "")
-set(ZC_BASE_FLAGS -Wall -Wextra -Wshadow -Wformat=2 -Wmissing-prototypes -Wstrict-prototypes -Wnull-dereference -Wundef -g)
+set(ZC_BASE_FLAGS -Wall -Wextra -Wshadow -Wformat=2 -Wmissing-prototypes -Wstrict-prototypes -Wnull-dereference -Wundef -Wfloat-equal -Wmissing-field-initializers -Wsign-compare -Wtype-limits -Wuninitialized -Wdouble-promotion -Wtautological-compare -Wshift-negative-value -Wdangling-else -Wreturn-local-addr -g)
 if(WIN32)
     if(MSVC)
         set(ZC_COMPILE_FLAGS "/W4 /Zi /D_CRT_SECURE_NO_WARNINGS")
