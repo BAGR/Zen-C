@@ -60,3 +60,9 @@ tests/compiler/lsp/test_runner
 cscope.out
 cscope.in.out
 cscope.po.out
+# Coverage
+*.gcda
+*.gcno
+*.gcov
+coverage.info
+coverage-report/

@@ -1,0 +1,10 @@
+// EXPECT: FAIL
+// compiler/diagnostics: missing return in non-void function should fail
+
+fn get_val() -> int {
+    let x = 42;
+}
+
+fn main() {
+    printf("%d\n", get_val());
+}

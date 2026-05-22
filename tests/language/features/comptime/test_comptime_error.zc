@@ -1,0 +1,10 @@
+// EXPECT: FAIL
+// language/features/comptime: comptime assertion failure should halt compilation
+
+comptime {
+    assert(1 == 2, "comptime assert should fail");
+}
+
+fn main() {
+    return 0;
+}

@@ -1,0 +1,39 @@
+// language/features/operators: compound assignment operators (+= -= *= /= %=)
+
+test "compound_add_int" {
+    let x = 10;
+    x += 5;
+    expect_eq(x, 15, "int += should add and assign");
+}
+
+test "compound_sub_int" {
+    let x = 10;
+    x -= 3;
+    expect_eq(x, 7, "int -= should subtract and assign");
+}
+
+test "compound_mul_int" {
+    let x = 4;
+    x *= 3;
+    expect_eq(x, 12, "int *= should multiply and assign");
+}
+
+test "compound_div_int" {
+    let x = 15;
+    x /= 4;
+    expect_eq(x, 3, "int /= should divide and assign (integer division)");
+}
+
+test "compound_rem_int" {
+    let x = 17;
+    x %= 5;
+    expect_eq(x, 2, "int %= should modulo and assign");
+}
+
+test "compound_chain" {
+    let x = 1;
+    x += 2;
+    x *= 3;
+    x -= 4;
+    expect_eq(x, 5, "chained compound assigns should work left-to-right");
+}

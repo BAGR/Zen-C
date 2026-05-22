@@ -570,12 +570,23 @@ ASTNode *parse_var_decl(ParserContext *ctx, Lexer *l, int is_export)
             t = temp_literal_type;
         }
 
-        // Special case for literals: if implicit conversion works
+        // Parser-level type validation: catches obvious mismatches like assigning
+        // string to int. More comprehensive type checking happens in the typechecker.
         if (t && !type_eq(type_obj, t))
         {
-            // Allow integer compatibility if types are roughly ints (lax check in type_eq handles
-            // most, but let's be safe)
-            if (!check_opaque_alias_compat(ctx, type_obj, t))
+            // Allow conversions that are safe or handled by the typechecker:
+            // numeric (int->float), pointer (char*->void*), function (closures),
+            // struct/array (Slice__char vs Slice_char naming), and opaque alias compat.
+            int is_numeric = (is_integer_type(type_obj) || is_float_type(type_obj)) &&
+                             (is_integer_type(t) || is_float_type(t));
+            int is_pointer = (type_obj->kind == TYPE_POINTER) || (t->kind == TYPE_POINTER);
+            int is_function = (type_obj->kind == TYPE_FUNCTION) || (t->kind == TYPE_FUNCTION);
+            int is_struct = (type_obj->kind == TYPE_STRUCT) || (t->kind == TYPE_STRUCT);
+            int is_array = (type_obj->kind == TYPE_ARRAY) || (t->kind == TYPE_ARRAY);
+            int is_opaque = (type_obj->kind == TYPE_ALIAS && type_obj->alias.is_opaque_alias) ||
+                            (t->kind == TYPE_ALIAS && t->alias.is_opaque_alias);
+            if (!is_numeric && !is_pointer && !is_function && !is_struct && !is_array &&
+                (!is_opaque || !check_opaque_alias_compat(ctx, type_obj, t)))
             {
                 char *expected = type_to_string(type_obj);
                 char *got = type_to_string(t);

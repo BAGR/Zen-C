@@ -1,0 +1,43 @@
+// language/features/operators: operator overloading edge cases
+
+struct Pair {
+    x: int;
+    y: int;
+}
+
+impl Pair {
+    fn new(a: int, b: int) -> Pair {
+        return Pair { x: a, y: b };
+    }
+    fn add(self, other: Pair) -> Pair {
+        return Pair { x: self.x + other.x, y: self.y + other.y };
+    }
+    fn eq(self, other: Pair) -> bool {
+        return self.x == other.x && self.y == other.y;
+    }
+}
+
+test "overload_add" {
+    let a = Pair::new(1, 2);
+    let b = Pair::new(3, 4);
+    let c = a + b;
+    expect_eq(c.x, 4, "overloaded + should add x fields");
+    expect_eq(c.y, 6, "overloaded + should add y fields");
+}
+
+test "overload_eq" {
+    let a = Pair::new(1, 2);
+    let b = Pair::new(1, 2);
+    let c = Pair::new(5, 6);
+    expect_eq(a == b, true, "overloaded == should match equal pairs");
+    expect_eq(a == c, false, "overloaded == should reject different pairs");
+}
+
+test "overload_chain" {
+    let a = Pair::new(1, 1);
+    let b = Pair::new(2, 2);
+    let c = Pair::new(3, 3);
+    let result = a + b + c;
+    expect_eq(result.x, 6, "chained overloaded + should work");
+    expect_eq(result.y, 6, "chained overloaded + should work for y");
+}

@@ -1,0 +1,10 @@
+// EXPECT: FAIL
+// compiler/diagnostics: wrong argument count should fail
+
+fn add(a: int, b: int) -> int {
+    return a + b;
+}
+
+fn main() {
+    let x = add(1);
+}

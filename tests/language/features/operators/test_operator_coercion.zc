@@ -1,0 +1,29 @@
+// language/features/operators: implicit type coercion in binary ops
+
+test "coerce_int_to_float" {
+    let a: f64 = 3.0;
+    let b: int = 2;
+    let c = a + (f64)b;
+    expect_eq(c >= 4.9 && c <= 5.1, true, "int + float should coerce to float");
+}
+
+test "coerce_unsigned_to_signed" {
+    let a: uint = 10;
+    let b: int = 5;
+    // Both promoted to int for comparison
+    expect_eq(a > b, true, "uint > int comparison should work");
+}
+
+test "coerce_mixed_arithmetic" {
+    let a: int = 7;
+    let b: uint = 3;
+    let c = a + (int)b;
+    expect_eq(c, 10, "int + uint should work with explicit cast");
+}
+
+test "coerce_bool_to_int" {
+    let t = true;
+    let f = false;
+    expect_eq(t == 1, true, "true should compare equal to 1");
+    expect_eq(f == 0, true, "false should compare equal to 0");
+}

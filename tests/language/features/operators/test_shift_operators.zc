@@ -1,0 +1,36 @@
+// language/features/operators: shift operators
+
+test "shift_left_simple" {
+    let x = 1;
+    let y = x << 4;
+    expect_eq(y, 16, "1 << 4 should be 16");
+}
+
+test "shift_right_simple" {
+    let x = 32;
+    let y = x >> 3;
+    expect_eq(y, 4, "32 >> 3 should be 4");
+}
+
+test "shift_left_chain" {
+    let x = 1;
+    let y = x << 1 << 2;
+    expect_eq(y, 8, "1 << 1 << 2 should be 8");
+}
+
+test "shift_compound" {
+    let x = 1;
+    x <<= 3;
+    expect_eq(x, 8, "compound <<= should work");
+
+    let y = 64;
+    y >>= 2;
+    expect_eq(y, 16, "compound >>= should work");
+}
+
+test "shift_with_negative" {
+    // Ensure shift still produces correct positive results
+    let a: i32 = 1;
+    let b: i32 = 5;
+    expect_eq(a << b, 32, "positive shift should work");
+}

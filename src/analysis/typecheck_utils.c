@@ -368,6 +368,14 @@ void tc_error_with_hints(TypeChecker *tc, Token t, const char *msg, const char *
     zerror_with_hints(t, msg, hints);
 }
 
+void tc_ctrl_flow_error(TypeChecker *tc, Token t, const char *msg, const char *const *hints)
+{
+    (void)tc;
+    // Control flow errors (missing return, unreachable code, etc.)
+    // are reported even during move-only checking.
+    zerror_with_hints(t, msg, hints);
+}
+
 void tc_move_error_with_hints(TypeChecker *tc, Token t, const char *msg, const char *const *hints)
 {
     (void)tc;

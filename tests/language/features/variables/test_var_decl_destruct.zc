@@ -1,0 +1,26 @@
+// language/features/variables: struct destructuring declaration edge cases
+
+struct Point {
+    x: int;
+    y: int;
+}
+
+impl Point {
+    fn new(a: int, b: int) -> Point {
+        return Point { x: a, y: b };
+    }
+}
+
+test "struct_destruct_basic" {
+    let p = Point::new(10, 20);
+    let Point { x, y } = p;
+    expect_eq(x, 10, "destructured x should be 10");
+    expect_eq(y, 20, "destructured y should be 20");
+}
+
+test "struct_destruct_rename" {
+    let p = Point::new(3, 4);
+    let Point { x: a, y: b } = p;
+    expect_eq(a, 3, "renamed destructured x should be 3");
+    expect_eq(b, 4, "renamed destructured y should be 4");
+}

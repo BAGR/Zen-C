@@ -1,0 +1,32 @@
+// language/features/operators: ternary operator edge cases
+
+test "ternary_basic" {
+    let x = 10;
+    let y = x > 5 ? 1 : 0;
+    expect_eq(y, 1, "ternary true branch should evaluate");
+}
+
+test "ternary_false" {
+    let x = 2;
+    let y = x > 5 ? 10 : 20;
+    expect_eq(y, 20, "ternary false branch should evaluate");
+}
+
+test "ternary_nested" {
+    let x = 7;
+    let y = x > 10 ? 1 : (x > 5 ? 2 : 3);
+    expect_eq(y, 2, "nested ternary should work");
+}
+
+test "ternary_with_expression" {
+    let a = 5;
+    let b = 3;
+    let c = a > b ? a + b : a - b;
+    expect_eq(c, 8, "ternary with expressions should work");
+}
+
+test "ternary_chain" {
+    let x = 0;
+    let result = x > 0 ? 1 : x < 0 ? -1 : 0;
+    expect_eq(result, 0, "chained ternary should work like else-if");
+}

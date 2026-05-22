@@ -171,7 +171,7 @@ void check_expr_call(TypeChecker *tc, ASTNode *node, int depth)
                      func_name, min_args, arg_count);
 
             const char *hints[] = {"Check the function signature for required parameters", NULL};
-            tc_error_with_hints(tc, node->token, msg, hints);
+            tc_ctrl_flow_error(tc, node->token, msg, hints);
         }
         else if (arg_count > sig->total_args && !sig->is_varargs)
         {
@@ -181,7 +181,7 @@ void check_expr_call(TypeChecker *tc, ASTNode *node, int depth)
 
             const char *hints[] = {
                 "Remove extra arguments or check if you meant to call a different function", NULL};
-            tc_error_with_hints(tc, node->token, msg, hints);
+            tc_ctrl_flow_error(tc, node->token, msg, hints);
         }
     }
 

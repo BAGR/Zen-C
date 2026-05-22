@@ -1,0 +1,6 @@
+// EXPECT: FAIL
+// compiler/diagnostics: break outside a loop should fail
+
+fn main() {
+    break;
+}

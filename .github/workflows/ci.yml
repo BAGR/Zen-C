@@ -388,6 +388,25 @@ jobs:
     - name: Build with Static Analyzer
       run: make CC=gcc-14 analyzer ZC_HAS_JIT=0
 
+  build-coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y libtcc-dev lcov
+    - name: Build and Test with Coverage
+      run: make coverage ZC_HAS_JIT=0
+    - name: Generate HTML Report
+      run: |
+        lcov --capture --directory obj --output-file coverage.info --no-external
+        genhtml coverage.info --output-directory coverage-report
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage-report/
+
   filcc:
     name: Fil-C Build
     runs-on: ubuntu-latest

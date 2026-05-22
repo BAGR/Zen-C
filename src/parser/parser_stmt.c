@@ -117,7 +117,9 @@ ASTNode *parse_statement(ParserContext *ctx, Lexer *l)
     if (tk.type == TOK_DO)
     {
         Token do_tok = lexer_next(l); // eat 'do'
+        ctx->cg.loop_depth++;
         ASTNode *body = parse_block(ctx, l);
+        ctx->cg.loop_depth--;
 
         // Expect 'while'
         Token while_tok = lexer_peek(l);
@@ -346,6 +348,12 @@ ASTNode *parse_statement(ParserContext *ctx, Lexer *l)
                 zpanic_at(break_token, "'break' is not allowed inside a 'defer' block");
             }
 
+            // Error if break is not inside any loop
+            if (ctx->cg.loop_depth == 0)
+            {
+                zpanic_at(break_token, "'break' outside a loop");
+            }
+
             ASTNode *n = ast_create(NODE_BREAK);
             n->token = break_token;
             n->break_stmt.target_label = NULL;
@@ -382,6 +390,11 @@ ASTNode *parse_statement(ParserContext *ctx, Lexer *l)
             if (ctx->cg.in_defer_block)
             {
                 zpanic_at(continue_token, "'continue' is not allowed inside a 'defer' block");
+            }
+
+            if (ctx->cg.loop_depth == 0)
+            {
+                zpanic_at(continue_token, "'continue' outside a loop");
             }
 
             ASTNode *n = ast_create(NODE_CONTINUE);

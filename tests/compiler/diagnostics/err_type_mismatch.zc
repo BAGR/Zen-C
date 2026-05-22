@@ -1,0 +1,6 @@
+// EXPECT: FAIL
+// compiler/diagnostics: type mismatch between int and string should fail
+
+fn main() {
+    let x: int = "hello";
+}

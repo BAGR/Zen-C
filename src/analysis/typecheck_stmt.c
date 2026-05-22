@@ -356,7 +356,7 @@ void check_function(TypeChecker *tc, ASTNode *node, int depth)
             const char *hints[] = {"Ensure all execution paths return a value",
                                    "Consider adding a default return at the end of the function",
                                    NULL};
-            tc_error_with_hints(tc, node->token, msg, hints);
+            tc_ctrl_flow_error(tc, node->token, msg, hints);
         }
     }
 

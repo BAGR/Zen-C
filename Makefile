@@ -511,6 +511,14 @@ msan: $(TARGET)
 analyzer: CFLAGS += -fanalyzer
 analyzer: $(TARGET) $(PLUGINS)
 
+# Code coverage (GCC only, incompatible with sanitizers)
+coverage: CFLAGS += --coverage -O0
+coverage: LIBS += --coverage
+coverage: $(TARGET) $(PLUGINS)
+	@echo "=> Running tests with coverage instrumentation..."
+	./tests/scripts/run_tests.sh --no-source -j 2
+	@echo "=> Coverage data generated. Run: lcov --capture --directory obj --output-file coverage.info"
+
 test-plugins: $(TARGET) $(PLUGINS)
 	./zc run tests/language/features/test_plugins_suite.zc
 
@@ -559,4 +567,4 @@ fuzz-clean:
 	rm -f $(FUZZ_TARGET) $(FUZZ_CMPLOG_TARGET)
 	rm -rf obj-fuzz obj-fuzz-cmplog
 
-.PHONY: all clean install uninstall install-ape uninstall-ape format format-check lint bench test test-misra test-tcc test-filcc test-lsp test-asan test-plugins zig clang filcc ape windows asan tsan msan lsan analyzer fuzz-build fuzz-run fuzz-clean
+.PHONY: all clean install uninstall install-ape uninstall-ape format format-check lint bench test test-misra test-tcc test-filcc test-lsp test-asan test-plugins zig clang filcc ape windows asan tsan msan lsan analyzer coverage fuzz-build fuzz-run fuzz-clean

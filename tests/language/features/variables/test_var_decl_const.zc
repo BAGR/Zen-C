@@ -1,0 +1,16 @@
+// language/features/variables: const qualifier on variable declarations
+
+test "const_var_basic" {
+    let x: const int = 42;
+    expect_eq(x, 42, "const int should hold value 42");
+}
+
+test "const_var_string" {
+    let s: const string = "hello";
+    expect_eq(s == "hello", true, "const string should hold hello");
+}
+
+test "const_var_float" {
+    let f: const f64 = 3.14;
+    expect_eq(f > 3.13 && f < 3.15, true, "const f64 should hold 3.14");
+}

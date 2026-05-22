@@ -88,7 +88,9 @@ static void auto_import_std_slice(ParserContext *ctx)
 ASTNode *parse_loop(ParserContext *ctx, Lexer *l)
 {
     Token tk = lexer_next(l);
+    ctx->cg.loop_depth++;
     ASTNode *b = parse_block(ctx, l);
+    ctx->cg.loop_depth--;
     ASTNode *n = ast_create(NODE_LOOP);
     n->token = tk;
     n->loop_stmt.body = b;
@@ -213,6 +215,7 @@ ASTNode *parse_if(ParserContext *ctx, Lexer *l)
 ASTNode *parse_while(ParserContext *ctx, Lexer *l)
 {
     Token tk = lexer_next(l);
+    ctx->cg.loop_depth++;
     ASTNode *cond = parse_expression(ctx, l);
     check_assignment_condition(cond);
     if (!cond)
@@ -243,6 +246,7 @@ ASTNode *parse_while(ParserContext *ctx, Lexer *l)
         }
         body = parse_statement(ctx, l);
     }
+    ctx->cg.loop_depth--;
     ASTNode *n = ast_create(NODE_WHILE);
     n->token = tk;
     n->while_stmt.condition = cond;
@@ -253,6 +257,7 @@ ASTNode *parse_while(ParserContext *ctx, Lexer *l)
 ASTNode *parse_for(ParserContext *ctx, Lexer *l)
 {
     Token for_token = lexer_next(l);
+    ctx->cg.loop_depth++;
 
     if (lexer_peek(l).type == TOK_IDENT)
     {
@@ -419,6 +424,7 @@ ASTNode *parse_for(ParserContext *ctx, Lexer *l)
                     else
                     {
                         n->for_range.body = user_body;
+                        ctx->cg.loop_depth--;
                         return n;
                     }
                 }
@@ -831,6 +837,7 @@ ASTNode *parse_for(ParserContext *ctx, Lexer *l)
                     }
                 }
 
+                ctx->cg.loop_depth--;
                 return outer_block;
             }
         }
@@ -913,5 +920,6 @@ ASTNode *parse_for(ParserContext *ctx, Lexer *l)
     n->for_stmt.condition = cond;
     n->for_stmt.step = step;
     n->for_stmt.body = body;
+    ctx->cg.loop_depth--;
     return n;
 }

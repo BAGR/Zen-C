@@ -1,0 +1,7 @@
+// EXPECT: FAIL
+// compiler/diagnostics: assigning to const variable should fail
+
+fn main() {
+    let x: const int = 10;
+    x = 20;
+}

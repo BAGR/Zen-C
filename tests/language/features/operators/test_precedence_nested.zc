@@ -1,0 +1,34 @@
+// language/features/operators: complex operator precedence
+
+test "precedence_mul_before_add" {
+    let x = 2 + 3 * 4;
+    expect_eq(x, 14, "2 + 3 * 4 should be 14 (not 20)");
+}
+
+test "precedence_parens" {
+    let x = (2 + 3) * 4;
+    expect_eq(x, 20, "(2 + 3) * 4 should be 20");
+}
+
+test "precedence_shift_vs_add" {
+    let x = 1 + 2 << 3;
+    // + binds tighter than <<, so (1+2)<<3 = 3<<3 = 24
+    expect_eq(x, 24, "1 + 2 << 3 should be 24");
+}
+
+test "precedence_comparison_vs_arith" {
+    let result = 2 + 3 > 4;
+    expect_eq(result, true, "2 + 3 > 4 should be true");
+}
+
+test "precedence_mixed_chain" {
+    let x = 10 - 2 * 3 + 4 / 2;
+    // 10 - 6 + 2 = 6
+    expect_eq(x, 6, "10 - 2 * 3 + 4 / 2 should be 6");
+}
+
+test "precedence_bitwise_vs_comparison" {
+    // & binds tighter than == in Zen, so (5 & 3) == 1 → 1 == 1 → true
+    let x = 5 & 3 == 1;
+    expect_eq(x, true, "5 & 3 == 1 should be true ((5&3)==1)");
+}
