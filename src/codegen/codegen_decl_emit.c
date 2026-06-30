@@ -758,22 +758,28 @@ void print_type_defs(ParserContext *ctx, ASTNode *nodes)
 
         if (ctx->config->use_cpp)
         {
-            EMIT(ctx, "static void _z_vec_push(Vec *v, void *item) { if(v->len >= v->cap) { v->cap "
-                      "= v->cap?v->cap*2:8; v->data = static_cast<void**>(realloc(v->data, v->cap "
+            EMIT(ctx, "static __attribute__((unused)) void _z_vec_push(Vec *v, void *item) { "
+                      "if(v->len >= v->cap) { v->cap "
+                      "= v->cap?v->cap*2:(size_t)8; v->data = static_cast<void**>(realloc(v->data, "
+                      "v->cap "
                       "* sizeof(void*))); } v->data[v->len++] = item; }\n");
             EMIT(ctx,
-                 "static inline Vec _z_make_vec(int count, ...) { Vec v = {0}; v.cap = count > 8 ? "
-                 "count : 8; v.data = static_cast<void**>(malloc(v.cap * sizeof(void*))); v.len = "
+                 "static inline __attribute__((unused)) Vec _z_make_vec(int count, ...) { Vec v = "
+                 "{0}; v.cap = (size_t)(count > 8 ? "
+                 "count : 8); v.data = static_cast<void**>(malloc(v.cap * sizeof(void*))); v.len = "
                  "0; va_list args; va_start(args, count); for(int i=0; i<count; i++) { "
                  "v.data[v.len++] = va_arg(args, void*); } va_end(args); return v; }\n");
         }
         else
         {
-            EMIT(ctx, "static void _z_vec_push(Vec *v, void *item) { if(v->len >= v->cap) { v->cap "
-                      "= v->cap?v->cap*2:8; v->data = z_realloc(v->data, v->cap * sizeof(void*)); "
+            EMIT(ctx, "static __attribute__((unused)) void _z_vec_push(Vec *v, void *item) { "
+                      "if(v->len >= v->cap) { v->cap "
+                      "= v->cap?v->cap*2:(size_t)8; v->data = z_realloc(v->data, v->cap * "
+                      "sizeof(void*)); "
                       "} v->data[v->len++] = item; }\n");
-            EMIT(ctx, "static inline Vec _z_make_vec(int count, ...) { Vec v = {0}; v.cap = count "
-                      "> 8 ? count : 8; v.data = z_malloc(v.cap * sizeof(void*)); v.len = 0; "
+            EMIT(ctx, "static inline __attribute__((unused)) Vec _z_make_vec(int count, ...) { Vec "
+                      "v = {0}; v.cap = (size_t)(count "
+                      "> 8 ? count : 8); v.data = z_malloc(v.cap * sizeof(void*)); v.len = 0; "
                       "va_list args; va_start(args, count); for(int i=0; i<count; i++) { "
                       "v.data[v.len++] = va_arg(args, void*); } va_end(args); return v; }\n");
         }

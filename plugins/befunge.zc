@@ -6,7 +6,7 @@ include <stdio.h>
 include <stdlib.h>
 include <string.h>
 
-fn skip_whitespace(p: char**) {
+@unused fn skip_whitespace(p: char**) {
     let ptr = *p;
     while (ptr[0] != 0 && isspace((int)ptr[0])) {
         ptr = &ptr[1];

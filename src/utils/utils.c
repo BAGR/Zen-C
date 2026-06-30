@@ -49,6 +49,7 @@ void *xmalloc(size_t size)
     if (!ptr)
     {
         zfatal("xmalloc: out of memory");
+        unreachable();
     }
     ((size_t *)ptr)[0] = size;
     ((size_t *)ptr)[1] = 0;

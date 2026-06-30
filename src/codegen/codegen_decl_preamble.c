@@ -164,7 +164,7 @@ void emit_preamble(ParserContext *ctx)
              "static\n#else\n#define ZC_FUNC\n#define ZC_GLOBAL\n#endif\n");
         EMIT(ctx, "%s",
              "typedef struct { void *func; void *ctx; void (*drop)(void*); } z_closure_T;\n");
-        EMIT(ctx, "%s", "static void *_z_closure_ctx_stash[256];\n");
+        EMIT(ctx, "%s", "static __attribute__((unused)) void *_z_closure_ctx_stash[256];\n");
         EMIT(ctx, "%s",
              "typedef void U0;\ntypedef int8_t I8;\ntypedef uint8_t U8;\ntypedef int16_t "
              "I16;\ntypedef uint16_t U16;\n");
@@ -186,7 +186,8 @@ void emit_preamble(ParserContext *ctx)
         }
         EMIT(ctx, "%s", "#define z_free free\n#define z_print printf\n");
         EMIT(ctx, "%s",
-             "static void __zenc_panic(const char* msg) { fprintf(stderr, \"Panic: %s\\n\", msg); "
+             "static __attribute__((unused)) void __zenc_panic(const char* msg) { fprintf(stderr, "
+             "\"Panic: %s\\n\", msg); "
              "exit(1); }\n");
         EMIT(ctx, "%s",
              "#if defined(__APPLE__)\n#define _ZC_SEC "
@@ -199,7 +200,8 @@ void emit_preamble(ParserContext *ctx)
              "0x79,0x7e,0x73,0x71};\n");
 
         EMIT(ctx, "%s",
-             "static void _z_autofree_impl(void *p) { void **pp = (void**)p; if(*pp) { "
+             "static __attribute__((unused)) void _z_autofree_impl(void *p) { void **pp = "
+             "(void**)p; if(*pp) { "
              "z_free(*pp); *pp = NULL; } }\n");
         EMIT(ctx, "%s",
              "#define __zenc_assert(cond, ...) if (!(cond)) { fprintf(stderr, \"  Assertion "
@@ -207,37 +209,42 @@ void emit_preamble(ParserContext *ctx)
         EMIT(ctx, "%s",
              "#define __zenc_expect(cond, ...) if (!(cond)) { fprintf(stderr, \"  Expectation "
              "failed: \" __VA_ARGS__); fprintf(stderr, \"\\n\"); _zc_test_failures++; }\n");
-        EMIT(ctx, "static int _zc_test_failures = 0;\n");
+        EMIT(ctx, "static __attribute__((unused)) int _zc_test_failures = 0;\n");
 
         // C++ compatible readln helper
         if (ctx->config->use_cpp)
         {
             EMIT(ctx, "%s",
-                 "static string _z_readln_raw() { size_t cap = 64; size_t len = 0; char *line = "
+                 "static __attribute__((unused)) string _z_readln_raw(void) { size_t cap = 64; "
+                 "size_t len = 0; char *line = "
                  "static_cast<char*>(malloc(cap)); if(!line) return NULL; int c; while((c = "
                  "fgetc(stdin)) != EOF) { if(c == '\\n') break; if(len + 1 >= cap) { cap *= 2; "
                  "char *n = static_cast<char*>(realloc(line, cap)); if(!n) { z_free(line); return "
-                 "NULL; } line = n; } line[len++] = c; } if(len == 0 && c == EOF) { z_free(line); "
+                 "NULL; } line = n; } line[len++] = (char)c; } if(len == 0 && c == EOF) { "
+                 "z_free(line); "
                  "return NULL; } line[len] = 0; return line; }\n");
         }
         else
         {
             EMIT(
                 ctx, "%s",
-                "static string _z_readln_raw() { size_t cap = 64; size_t len = 0; char *line = "
+                "static __attribute__((unused)) string _z_readln_raw(void) { size_t cap = 64; "
+                "size_t len = 0; char *line = "
                 "z_malloc(cap); if(!line) return NULL; int c; while((c = fgetc(stdin)) != EOF) { "
                 "if(c == '\\n') break; if(len + 1 >= cap) { cap *= 2; char *n = z_realloc(line, "
-                "cap); if(!n) { z_free(line); return NULL; } line = n; } line[len++] = c; } if(len "
+                "cap); if(!n) { z_free(line); return NULL; } line = n; } line[len++] = (char)c; } "
+                "if(len "
                 "== 0 && c == EOF) { z_free(line); return NULL; } line[len] = 0; return line; }\n");
         }
         EMIT(ctx, "%s",
-             "static int _z_scan_helper(const char *fmt, ...) { char *l = _z_readln_raw(); if(!l) "
+             "static __attribute__((unused)) int _z_scan_helper(const char *fmt, ...) { char *l = "
+             "_z_readln_raw(); if(!l) "
              "return 0; va_list ap; va_start(ap, fmt); int r = vsscanf(l, fmt, ap); va_end(ap); "
              "z_free(l); return r; }\n");
 
         // REPL helpers: suppress/restore stdout.
         EMIT(ctx, "%s", "static int _z_orig_stdout = -1;\n");
-        EMIT(ctx, "%s", "static void _z_suppress_stdout() {\n");
+        EMIT(ctx, "%s", "static __attribute__((unused)) void _z_suppress_stdout(void) {\n");
         emitter_indent(&ctx->cg.emitter);
         EMIT(ctx, "%s", "fflush(stdout);\n");
         EMIT(ctx, "%s", "if (_z_orig_stdout == -1) _z_orig_stdout = dup(STDOUT_FILENO);\n");
@@ -246,7 +253,7 @@ void emit_preamble(ParserContext *ctx)
         EMIT(ctx, "%s", "close(nullfd);\n");
         emitter_dedent(&ctx->cg.emitter);
         EMIT(ctx, "%s", "}\n");
-        EMIT(ctx, "%s", "static void _z_restore_stdout() {\n");
+        EMIT(ctx, "%s", "static __attribute__((unused)) void _z_restore_stdout(void) {\n");
         emitter_indent(&ctx->cg.emitter);
         EMIT(ctx, "%s", "fflush(stdout);\n");
         EMIT(ctx, "%s", "if (_z_orig_stdout != -1) {\n");

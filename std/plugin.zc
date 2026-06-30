@@ -29,22 +29,22 @@ struct ZApi {
 }
 
 struct ZPlugin {
-    name: char[256], // ZEN_PLUGIN_MAX_NAME
+    name: char[ZEN_PLUGIN_MAX_NAME],
     handler: fn*(char*, ZApi*),
     hover_handler: fn*(char*, int, int) -> char*
 }
 
 // Helper: Provide a more native Zen C experience for diagnostics
 impl ZApi {
-    fn report_error(self, msg: char*) {
+    @unused fn report_error(self, msg: char*) {
         self.error(self, "%s", msg);
     }
     
-    fn report_warn(self, msg: char*) {
+    @unused fn report_warn(self, msg: char*) {
         self.warn(self, "%s", msg);
     }
     
-    fn report_note(self, msg: char*) {
+    @unused fn report_note(self, msg: char*) {
         self.note(self, "%s", msg);
     }
 }
