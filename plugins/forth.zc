@@ -231,7 +231,7 @@ fn eval_forth_token(token: char*, scan_ptr: char**, out_ptr: char**, api: ZApi*)
         fpush(fpop() * fpop());
     } else if (strcmp(token, "f/") == 0) {
         let b = fpop();
-        fpush(if (b != 0.0) fpop() / b else 0.0);
+        fpush(if (fabs(b) > 1e-15) fpop() / b else 0.0);
     } else if (strcmp(token, "fsqrt") == 0) {
         fpush(sqrt(fpop()));
     } else if (strcmp(token, "dup") == 0) {

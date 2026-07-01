@@ -48,3 +48,7 @@ impl ZApi {
         self.note(self, "%s", msg);
     }
 }
+
+@unused fn _z_use_plugin_constants() {
+    let _ = ZEN_PLUGIN_API_VERSION;
+}

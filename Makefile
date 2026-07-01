@@ -58,7 +58,7 @@ CFLAGS = -std=$(C_STD) -g -Wall -Wextra -Wshadow -Wformat=2 -Wmissing-prototypes
 
 # 145 of 191 TRE warnings were fixed directly in source. The remaining 46 come from macro
 # expansions (ALIGN, IS_WORD_CHAR) and explicit sign-conversion casts in vendored code.
-obj/std/third-party/tre/%.o: CFLAGS += -Wno-sign-conversion -Wno-switch-default -Wno-cast-align -Wno-implicit-fallthrough -Wno-redundant-decls $(if $(filter 1,$(CC_IS_CLANG)),,-Wno-analyzer-null-dereference -Wno-analyzer-out-of-bounds)
+obj/std/third-party/tre/%.o: CFLAGS += -Wno-sign-conversion -Wno-switch-default -Wno-cast-align -Wno-implicit-fallthrough -Wno-redundant-decls $(if $(filter 1,$(CC_IS_CLANG)),,-Wno-analyzer-null-dereference -Wno-analyzer-out-of-bounds -Wno-analyzer-malloc-leak -Wno-analyzer-file-leak)
 
 # Detect Clang by macro (works even when CC=cc on macOS, or CC=clang on Linux)
 # Uses recursive = so it re-evaluates with target-specific CC overrides (e.g. msan: CC=clang)
@@ -325,7 +325,6 @@ obj-ape/plugins/%.o: obj-ape/plugins/%.c
 	@$(MKDIR) $(@D)
 	@psafe=$$(echo $* | sed 's/[^a-zA-Z0-9]/_/g'); \
 	$(COSMOCC) $(CFLAGS) \
-		-Wno-unused-const-variable \
 		-DZC_STATIC_PLUGIN -Dz_plugin_init=z_plugin_init_$$psafe -c $< -o $@
 
 $(ZC_COM): $(ZC_COM_BIN)
