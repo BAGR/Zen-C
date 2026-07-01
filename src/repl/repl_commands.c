@@ -299,6 +299,7 @@ static int cmd_edit(ReplState *state, const char *args)
                         if (nread != (size_t)(length))
                         {
                             free(buffer);
+                            fclose(fr);
                             return REPL_HANDLED;
                         }
                         buffer[length] = 0;
@@ -374,6 +375,7 @@ static int cmd_edit(ReplState *state, const char *args)
                     if (nread != (size_t)(length))
                     {
                         free(buffer);
+                        fclose(fr);
                         return REPL_HANDLED;
                     }
                     buffer[length] = 0;

@@ -49,7 +49,7 @@ void *xmalloc(size_t size)
     if (!ptr)
     {
         zfatal("xmalloc: out of memory");
-        exit(1);
+        exit(1); // whitelisted
     }
     ((size_t *)ptr)[0] = size;
     ((size_t *)ptr)[1] = 0;
@@ -63,7 +63,7 @@ void *xcalloc(size_t n, size_t size)
     if (!ptr)
     {
         zfatal("xcalloc: out of memory");
-        exit(1);
+        exit(1); // whitelisted
     }
     memset(ptr, 0, total + XMALLOC_HDR_SIZE);
     ((size_t *)ptr)[0] = total;
